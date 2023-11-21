@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://xd5xd1257uxn"]
+
+[ext_resource type="Script" path="res://Scenes/main.gd" id="1_xpxhf"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_xpxhf")
+
+[node name="BeatSoundPlayer" type="AudioStreamPlayer" parent="."]
