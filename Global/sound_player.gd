@@ -2,14 +2,14 @@ extends Node2D;
 
 @onready var sound = preload("res://Sounds/metronome.mp3");
 
-var bpm = 240.0;
+@export var bpm = 240.0;
 var sound_start = false;
 var beat_count = 0;
 
 func play_sound_bpm(bpm):
 	var s  = 60 / bpm;
 	print('Second: %f' % [s]);
-	
+		
 	while(sound_start):
 		beat_count += 1;
 		print(beat_count)

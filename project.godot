@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="RhythmMania"
-run/main_scene="res://Scenes/main.tscn"
+run/main_scene="res://Global/sound_player.tscn"
 config/features=PackedStringArray("4.1", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+SoundPlayer="*res://Global/sound_player.tscn"
 
 [editor_plugins]
 

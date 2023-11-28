@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://xd5xd1257uxn"]
+
+[ext_resource type="Script" path="res://Global/sound_player.gd" id="1_jqmld"]
+
+[node name="SoundPlayer" type="Node2D"]
+script = ExtResource("1_jqmld")
+
+[node name="BeatSoundPlayer" type="AudioStreamPlayer" parent="."]
