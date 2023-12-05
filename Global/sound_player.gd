@@ -2,8 +2,7 @@ extends Node2D;
 
 @export var bpm = 120.0;
 
-@onready var sound = preload("res://Sounds/metronome.mp3");
-
+@onready var sound = preload("res://Assets/Sounds/metronome.mp3");
 
 var isPlaying = false;
 var pre_beat_count = 0;
