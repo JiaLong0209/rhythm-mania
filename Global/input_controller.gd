@@ -6,7 +6,7 @@ func _ready():
 	pass # Replace with function body.
 
 func _input(event):
-	#print(event))
+	
 	if Input.is_action_just_pressed('game_4k_1'):
 		#print(event.as_text(), 1)
 		print(1);

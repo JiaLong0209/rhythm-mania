@@ -18,8 +18,9 @@ config/icon="res://icon.svg"
 [autoload]
 
 SoundPlayer="*res://Global/sound_player.tscn"
+InputController="*res://Global/input_controller.gd"
 Global="*res://Global/global.gd"
-InputManager="*res://Global/input_manager.gd"
+MapContainer="*res://Global/map_container.gd"
 
 [editor_plugins]
 
@@ -29,9 +30,10 @@ enabled=PackedStringArray("res://addons/godot_vim/plugin.cfg")
 
 folder_colors={
 "res://Assets/Sounds/": "blue",
-"res://Global/": "yellow",
+"res://Global/": "orange",
 "res://Objects/": "purple",
-"res://Scenes/": "red",
+"res://Scenes/": "green",
+"res://UI/": "pink",
 "res://Web/": "gray",
 "res://addons/": "gray"
 }

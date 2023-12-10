@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://bw1joyir4dl7a"]
+
+[ext_resource type="PackedScene" uid="uid://boynucegyuowy" path="res://Objects/note_track.tscn" id="1_27vk4"]
+
+[node name="NoteContainer" type="Panel"]
+custom_minimum_size = Vector2(400, 1000)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+offset_right = 600.0
+offset_bottom = 1000.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NoteTrack" parent="HBoxContainer" instance=ExtResource("1_27vk4")]
+layout_mode = 2
+
+[node name="NoteTrack2" parent="HBoxContainer" instance=ExtResource("1_27vk4")]
+layout_mode = 2
+
+[node name="NoteTrack3" parent="HBoxContainer" instance=ExtResource("1_27vk4")]
+layout_mode = 2
+
+[node name="NoteTrack4" parent="HBoxContainer" instance=ExtResource("1_27vk4")]
+layout_mode = 2

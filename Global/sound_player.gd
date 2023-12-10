@@ -8,6 +8,10 @@ var isPlaying = false;
 var pre_beat_count = 0;
 var beat_count = 0;
 
+func _ready():
+	$BeatSoundPlayer.stream = sound;
+	$BeatSoundPlayer.max_polyphony = 10;
+	
 func play_sound_by_beats(beats: int):
 	isPlaying = true;
 	SoundPlayer.play_sound_bpm(beats);
@@ -43,11 +47,5 @@ func stop():
 	isPlaying = false;
 
 
-func _ready():
-	$BeatSoundPlayer.stream = sound;
-	$BeatSoundPlayer.max_polyphony = 10;
-	
 
-func _process(delta):
-	pass;
-	
+
