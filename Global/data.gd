@@ -5,7 +5,6 @@ extends Resource
 # mode, title, BPM, time, streams, notes
 @export var scroll_time : float = 0.5
 @export var beat_maps : Array = []
-#@export var MapContainer := MapContainer.new()
 
 var save_path = 'user://save'
 
