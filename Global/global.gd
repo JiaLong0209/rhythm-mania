@@ -1,50 +1,83 @@
 extends Node2D
-var dev = 1
 
-@export var user_data := Data.new()
-@onready var screen_size = DisplayServer.screen_get_size()
-@onready var window = get_window()
-
-var is_game_start = true
-var scroll_time : float = 2
-var judgement : Dictionary = {
-	'perfect' : 0.016,
-	'great' : 0.050,
-	'good' : 0.083,
-	'ok' : 0.112,
-	'meh': 0.136,
-	'miss': 0.173,
+enum Mode {
+	Key0 = 0,
+	Key4 = 4,
+	Key5 = 5,
+	Key6 = 6,
+	Key7 = 7,
 }
 
-var green := Color('55f059')
-var red := Color(0.9, 0, 0, 1)
-var yellow := Color('fff377')
-var blue := Color('2551f5')
-var white := Color('fff')
+enum NoteType {
+	NOTE = 0,
+	LONG_NOTE = 1,
+}
+
+enum Judgement {
+	PERFECT = 17,
+	GREAT = 40,
+	GOOD = 80,
+	OK = 110,
+	MEH = 130,
+	MISS = 163,
+}
+
+enum JudgementType { PERFECT, GREAT, GOOD, OK, MEH, MISS }
+
+@export var user_data : Data = Data.new()
+
+var Colors = {
+	'green': Color('55f059'),
+	'red': Color(0.9, 0, 0, 1),
+	'blue': Color('2551f5'),
+	'yellow': Color('fff377'),
+	'white': Color('fff'),
+}
+var hit_result = [ "Perfect", "Great", "Good", "Ok", "Bad", "Miss" ]
+
+# User setting
+var scroll_time : float = 0.6
+var audio_offset : int = 0
+var hit_offset : int = 0
+var start_time : float = 1.0
+var preparation_beat : int = 3
+
+#var dev = true
+var dev = false
+var is_game_start = true
+var judgement_max_error = 200
+
 var transition := 0.4
+
+@onready var screen_size = DisplayServer.screen_get_size()
+@onready var window = get_window()
 
 func _ready():
 	Engine.max_fps = 120
 	print("Global ready")
-	test()
-	while dev:
-		await get_tree().create_timer(1.0).timeout
-		print(Engine.get_frames_per_second())
-
-func _process(delta):
-	return
+	load_default_data()
+	if dev:
+		test()
+		while dev:
+			await get_tree().create_timer(1.0).timeout
+			#print('FPS: %s' % Engine.get_frames_per_second())
 	
-func test() -> void:
-	var default_map = BeatMap.new( '4k', 'easy', 60.0, 10.0, 10, [[0.5,0.9]] )
+func load_default_data() -> void:
+	#var default_map = BeatMap.new( '4k', 'easy', 120.0, 13.0, 0, [[0.25,0.75],[0.5,0.75],[0.5,0.75],[0.5,0.75]] )
+	var default_map = BeatMap.new( '4k', 'easy', 120.0, 0, 5, [[HitObject.new(0.5)],[HitObject.new(1)],[HitObject.new(1.5)],[HitObject.new(2)]] )
 	MapContainer.add_beat_map(default_map)
-	user_data.save_game()
 	
-	var hard_map = BeatMap.new( '4k', 'hard', 180.0, 10.0, 10, [[0.5,0.9], [0.6, 1., 3.]] )
+	#var hard_map = BeatMap.new( '4k', 'hard', 180.0, 0.0, 10, [[0.5, 1.0], [0.5, 1, 2], [0.5, 2.5, 3], [1,2,3,4]] )
+	var hard_map = BeatMap.new( '4k', 'hard', 180.0, 0.0, 5, [[HitObject.new(0.5), HitObject.new(3), HitObject.new(2)],[HitObject.new(0.5), HitObject.new(1.5)],[HitObject.new(2)],[HitObject.new(1), HitObject.new(2.5)]] )
 	MapContainer.add_beat_map(hard_map)
 	
 	print('Global: ', MapContainer.beat_maps)
 	user_data.print_beat_maps_info()
-	
+
+func get_current_time() -> float:
+	return Time.get_unix_time_from_system()
+
+func test():
+	user_data.save_game()
 	user_data = user_data.load_game()
-	
 	user_data.print_beat_maps_info()

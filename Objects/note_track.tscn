@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://boynucegyuowy"]
 
 [ext_resource type="Script" path="res://Objects/note_track.gd" id="1_4nqkt"]
-[ext_resource type="PackedScene" uid="uid://cxjiwai0dyd7" path="res://Objects/hit_note.tscn" id="2_6u6d4"]
+[ext_resource type="PackedScene" uid="uid://cxjiwai0dyd7" path="res://Objects/idle_note.tscn" id="2_phr2y"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mofqr"]
 bg_color = Color(0, 0, 0, 0.45098)
@@ -27,7 +27,7 @@ offset_right = 100.0
 offset_bottom = 500.0
 color = Color(0.0980392, 0.0901961, 0.0901961, 1)
 
-[node name="HitNote" parent="." instance=ExtResource("2_6u6d4")]
+[node name="IdleNote" parent="." instance=ExtResource("2_phr2y")]
 layout_mode = 0
 anchors_preset = 0
 anchor_left = 0.0
@@ -38,4 +38,4 @@ offset_bottom = 100.0
 grow_horizontal = 1
 grow_vertical = 1
 
-[connection signal="pressed" from="HitNote" to="." method="_on_hit_note_pressed"]
+[connection signal="pressed" from="IdleNote" to="." method="_on_idle_note_pressed"]

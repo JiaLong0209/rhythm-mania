@@ -1,28 +1,28 @@
 extends Node
 
-var mode = '4k'
-var key_index = range(int(mode[0])).map(func(x): return x+1)
-#var key_index = [1,2,3,4]
-# Called when the node enters the scene tree for the first time.
+var mode = Global.Mode.Key4
+var key_index = range(int(mode)).map(func(x): return x+1)
+
 func _ready():
-	pass # Replace with function body.
+	pass 
 
 func _input(event):
+	if Input.is_action_just_pressed('quit_game'):
+		get_tree().quit()
+		
 	if Global.is_game_start:
-		
 		for i in key_index:
-			if Input.is_action_just_pressed('game_%s_%d' % [mode, i]):
+			if Input.is_action_just_pressed('game_%s_%d' % [str(mode)+'k', i]):
 				press_by_index(i-1)
-		
-			if Input.is_action_just_released('game_%s_%d' % [mode, i]):
+			if Input.is_action_just_released('game_%s_%d' % [str(mode)+'k', i]):
 				release_by_index(i-1)
 				
 func press_by_index(index: int):
 		var note_track = get_tree().get_nodes_in_group('note_track')[index]
-		note_track.get_node('HitNote').press()
+		note_track.get_node('IdleNote').press()
 	
 func release_by_index(index: int):
 		var note_track = get_tree().get_nodes_in_group('note_track')[index]
-		note_track.get_node('HitNote').release()
+		note_track.get_node('IdleNote').release()
 	
 	

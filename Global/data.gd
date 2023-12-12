@@ -2,8 +2,10 @@
 class_name Data
 extends Resource
 
-# mode, title, BPM, time, streams, notes
+# mode, title, BPM, time, repeat_times, notes
 @export var scroll_time : float = 0.5
+@export var audio_offset : int =  0
+@export var hit_offset : int = 0
 @export var beat_maps : Array = []
 
 var save_path = 'user://save'
@@ -14,6 +16,10 @@ func _init():
 
 func save_game() -> void:
 	beat_maps = MapContainer.beat_maps
+	scroll_time = Global.scroll_time
+	audio_offset = Global.audio_offset
+	hit_offset = Global.hit_offset
+	
 	ResourceSaver.save(self, save_path)
 	print('Save successful!')
 	
@@ -26,15 +32,8 @@ func load_game():
 
 func print_beat_maps_info() -> void:
 	if ! MapContainer.beat_maps:
-		print('There are not map')
+		print('There is no map')
 		return
-	for i in MapContainer.beat_maps:
-		print('------------------------')
-		print("titie: " + str(i.title))
-		print("mode: " + str(i.mode))
-		print("BPM: " + str(i.bpm))
-		print("streams: " + str(i.streams))
-		print("time: " + str(i.time))
-		print("notes: " + str(i.notes))
-	print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-
+	
+	for i:BeatMap in MapContainer.beat_maps:
+		i.print_beat_map_info()

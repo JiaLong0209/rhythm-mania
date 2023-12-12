@@ -1,12 +1,22 @@
-[gd_scene load_steps=3 format=3 uid="uid://bu0dtmdj4wklg"]
+[gd_scene load_steps=5 format=3 uid="uid://bu0dtmdj4wklg"]
 
 [ext_resource type="Script" path="res://Objects/note.gd" id="1_ctj7k"]
 [ext_resource type="Texture2D" uid="uid://6o4og5yjtgp4" path="res://Assets/Images/brick2.png" id="1_g484p"]
+[ext_resource type="Texture2D" uid="uid://c10ms4jx4fhmu" path="res://Assets/Images/Note.png" id="2_gfvt7"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qkdap"]
+blend_mode = 1
 
 [node name="Note" type="Node2D" groups=["note"]]
 z_index = 10
 script = ExtResource("1_ctj7k")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="NoteTexture" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_qkdap")
+texture = ExtResource("2_gfvt7")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+visible = false
+material = SubResource("CanvasItemMaterial_qkdap")
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("1_g484p")

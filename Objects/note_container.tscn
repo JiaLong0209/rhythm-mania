@@ -11,7 +11,7 @@ custom_minimum_size = Vector2(400, 1000)
 theme_override_styles/panel = SubResource("StyleBoxFlat_m7sqy")
 script = ExtResource("1_8x8pc")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="TrackContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 offset_right = 412.0
 offset_bottom = 1000.0
@@ -19,14 +19,14 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="NoteTrack" parent="HBoxContainer" instance=ExtResource("1_27vk4")]
+[node name="NoteTrack" parent="TrackContainer" instance=ExtResource("1_27vk4")]
 layout_mode = 2
 
-[node name="NoteTrack2" parent="HBoxContainer" instance=ExtResource("1_27vk4")]
+[node name="NoteTrack2" parent="TrackContainer" instance=ExtResource("1_27vk4")]
 layout_mode = 2
 
-[node name="NoteTrack3" parent="HBoxContainer" instance=ExtResource("1_27vk4")]
+[node name="NoteTrack3" parent="TrackContainer" instance=ExtResource("1_27vk4")]
 layout_mode = 2
 
-[node name="NoteTrack4" parent="HBoxContainer" instance=ExtResource("1_27vk4")]
+[node name="NoteTrack4" parent="TrackContainer" instance=ExtResource("1_27vk4")]
 layout_mode = 2
