@@ -31,8 +31,12 @@ func create_note() -> void:
 	fit_note_size_to_track(note)
 	add_child(note)
 	
-func create_note_by_sec(sec: float) -> void:
-	pass
+func create_note_by_sec(time: float) -> void:
+	var note := note_scene.instantiate()
+	note.position = spawn_mark.position
+	fit_note_size_to_track(note)
+	await get_tree().create_timer(time).timeout
+	add_child(note)
 	
 func set_notes(p_notes: Array) -> void:
 	p_notes as Array[HitObject]

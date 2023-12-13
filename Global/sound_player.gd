@@ -1,6 +1,6 @@
 extends Node2D 
 
-@export var bpm = 60.0
+@export var bpm = 0.0
 
 @onready var sound = preload("res://Assets/Sounds/metronome.mp3") 
 

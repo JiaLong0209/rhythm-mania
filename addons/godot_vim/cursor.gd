@@ -28,24 +28,23 @@ func _ready():
 	call_deferred('set_mode', Mode.NORMAL)
 
 
-func cursor_changed():
+func cursor_changed() -> void:
 	draw_cursor()
 
-func focus_entered():
+func focus_entered() -> void:
 	if mode == Mode.NORMAL:
 		code_edit.release_focus()
 		self.grab_focus()
 
 
-func reset_normal():
+func reset_normal() -> void:
 	input_stream = ''
 	set_mode(Mode.NORMAL)
 	selection_from = Vector2i.ZERO
 	selection_to = Vector2i.ZERO
 	set_column(code_edit.get_caret_column())
-	return
 
-func back_to_normal_mode(event, m):
+func back_to_normal_mode(event, m) -> int:
 	var old_caret_pos = code_edit.get_caret_column()
 	if Input.is_key_pressed(KEY_ESCAPE):
 		if m == Mode.INSERT:
@@ -60,7 +59,7 @@ func back_to_normal_mode(event, m):
 	return 0
 
 	
-func _input(event):
+func _input(event) -> void:
 	if back_to_normal_mode(event, mode):	return
 	draw_cursor()
 	if !has_focus():	return
@@ -282,7 +281,7 @@ func handle_input_stream(stream: String) -> String:
 	if stream == 'i' and mode == Mode.NORMAL:
 		set_mode(Mode.INSERT)
 		return ''
-	
+
 	if stream == 'a' and mode == Mode.NORMAL:
 		set_mode(Mode.INSERT)
 		move_column(+1)
@@ -603,7 +602,7 @@ func get_word_edge_pos(from_line: int, from_col: int, delims: String, mode: Word
 		col = (text.length() - 1) * int(search_dir < 0 and char_offset < 0)
 	return Vector2i(from_col, from_line)
 
-func get_paragraph_edge_pos(from_line: int, search_dir: int):
+func get_paragraph_edge_pos(from_line: int, search_dir: int) -> Vector2i:
 	var line: int = from_line
 	var prev_empty: bool = code_edit.get_line(line) .strip_edges().is_empty()
 	line += search_dir
@@ -671,7 +670,7 @@ func calc_double_motion_region(from_pos: Vector2i, stream: String, from_char: in
 	
 	return [] # Unknown combination
 
-func toggle_comment(line: int):
+func toggle_comment(line: int) -> void:
 	var ind: int = code_edit.get_first_non_whitespace_column(line)
 	var text: String = get_line_text(line)
 	# Comment line
@@ -683,7 +682,7 @@ func toggle_comment(line: int):
 	code_edit.select(line, ind, line, start_col)
 	code_edit.delete_selection()
 
-func set_mode(m: int):
+func set_mode(m: int) -> void: 
 	var old_mode: int = mode
 	mode = m
 	command_line.close()
@@ -719,7 +718,7 @@ func set_mode(m: int):
 		_:
 			pass
 
-func move_line(offset:int):
+func move_line(offset:int) -> void:
 	set_line(get_line() + offset)
 
 func get_line() -> int:
@@ -742,34 +741,32 @@ func set_caret_pos(line: int, column: int):
 func get_caret_pos() -> Vector2i:
 	return Vector2i(code_edit.get_caret_column(), code_edit.get_caret_line())
 
-func set_line(position:int):
-	if !is_mode_visual(mode):
-		code_edit.set_caret_line(min(position, code_edit.get_line_count()-1))
-		return
+func set_line(position:int) -> void:
+	code_edit.set_caret_line(min(position, code_edit.get_line_count()-1))
 	
-	selection_to = Vector2i( clampi(selection_to.x, 0, get_line_length(position)), clampi(position, 0, code_edit.get_line_count()) )
-	update_visual_selection()
+	if is_mode_visual(mode):
+		selection_to = Vector2i( clampi(selection_to.x, 0, get_line_length(position)), clampi(position, 0, code_edit.get_line_count()) )
+		update_visual_selection()
 
 
-func move_column(offset: int):
+func move_column(offset: int) -> void:
 	set_column(get_column()+offset)
 	
-func get_column():
+func get_column() -> int:
 	if is_mode_visual(mode):
 		return selection_to.x
 	return code_edit.get_caret_column()
 
-func set_column(position: int):
-	if !is_mode_visual(mode):
-		var line: String = code_edit.get_line(code_edit.get_caret_line())
-		code_edit.set_caret_column(min(line.length(), position))
-		return
+func set_column(position: int) -> void:
+	var line: String = code_edit.get_line(code_edit.get_caret_line())
+	code_edit.set_caret_column(min(line.length(), position))
 	
-	selection_to = Vector2i( clampi(position, 0, get_line_length(selection_to.y)), clampi(selection_to.y, 0, code_edit.get_line_count()) )
-	update_visual_selection()
+	if is_mode_visual(mode):
+		selection_to = Vector2i( clampi(position, 0, get_line_length(selection_to.y)), clampi(selection_to.y, 0, code_edit.get_line_count()))
+		update_visual_selection()
 
 
-func update_visual_selection():
+func update_visual_selection() -> void:
 	if mode == Mode.VISUAL:
 		var to_right: bool = selection_to.x >= selection_from.x or selection_to.y > selection_from.y
 		code_edit.select( selection_from.y, selection_from.x + int(!to_right), selection_to.y, selection_to.x + int(to_right) )
@@ -794,7 +791,7 @@ func is_uppercase(text: String) -> bool:
 func get_stream_char(stream: String, idx: int) -> String:
 	return stream[idx] if stream.length() > idx else ''
 
-func draw_cursor():
+func draw_cursor() -> void:
 	if code_edit.is_dragging_cursor():
 		if(code_edit.get_selected_text(0)):
 			selection_from = Vector2i(code_edit.get_selection_from_column(), code_edit.get_selection_from_line())
@@ -821,7 +818,7 @@ func draw_cursor():
 	
 	code_edit.select(line, column, line, column+1)
 
-func paste_forward():
+func paste_forward() -> void:
 		code_edit.begin_complex_operation()
 		if is_mode_visual(mode):
 			code_edit.delete_selection()
@@ -835,7 +832,7 @@ func paste_forward():
 		code_edit.end_complex_operation()
 		set_mode(Mode.NORMAL)
 	
-func paste_backward():
+func paste_backward() -> void:
 	code_edit.begin_complex_operation()
 	if is_mode_visual(mode):
 		code_edit.delete_selection()
@@ -847,14 +844,14 @@ func paste_backward():
 	code_edit.end_complex_operation()
 	set_mode(Mode.NORMAL)
 	
-func swap_line(line: int, n: int):
+func swap_line(line: int, n: int) -> void:
 	code_edit.swap_lines(min(line, line+n), max(line, line+n))
 	if(is_mode_visual(mode)):
 		update_visual_selection()
 	else: 
 		move_line(n)
 
-func swap_multi_lines(from: int, to: int, n: int):
+func swap_multi_lines(from: int, to: int, n: int) -> void:
 	var a := from
 	var b := to
 	from = min(a,b)

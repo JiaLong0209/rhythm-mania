@@ -36,7 +36,7 @@ var Colors = {
 var hit_result = [ "Perfect", "Great", "Good", "Ok", "Bad", "Miss" ]
 
 # User setting
-var scroll_time : float = 0.6
+var scroll_time : float = 0.5
 var audio_offset : int = 0
 var hit_offset : int = 0
 var start_time : float = 1.0
@@ -64,11 +64,11 @@ func _ready():
 	
 func load_default_data() -> void:
 	#var default_map = BeatMap.new( '4k', 'easy', 120.0, 13.0, 0, [[0.25,0.75],[0.5,0.75],[0.5,0.75],[0.5,0.75]] )
-	var default_map = BeatMap.new( '4k', 'easy', 120.0, 0, 5, [[HitObject.new(0.5)],[HitObject.new(1)],[HitObject.new(1.5)],[HitObject.new(2)]] )
+	var default_map = BeatMap.new( '4k', 'easy', 120.0, 0, 5, [[HitObject.new(1), HitObject.new(2)],[HitObject.new(1)],[HitObject.new(1.5)],[HitObject.new(2), HitObject.new(1)]] )
 	MapContainer.add_beat_map(default_map)
 	
-	#var hard_map = BeatMap.new( '4k', 'hard', 180.0, 0.0, 10, [[0.5, 1.0], [0.5, 1, 2], [0.5, 2.5, 3], [1,2,3,4]] )
-	var hard_map = BeatMap.new( '4k', 'hard', 180.0, 0.0, 5, [[HitObject.new(0.5), HitObject.new(3), HitObject.new(2)],[HitObject.new(0.5), HitObject.new(1.5)],[HitObject.new(2)],[HitObject.new(1), HitObject.new(2.5)]] )
+	var hard_map = BeatMap.new( '4k', 'hard', 180.0, 0.0, 5, [[HitObject.new(1), HitObject.new(3), HitObject.new(2)],[HitObject.new(1), HitObject.new(3)],[HitObject.new(2)],[HitObject.new(1), HitObject.new(2)]] )
+	#var hard_map = BeatMap.new( '4k', 'hard', 180.0, 0.0, 5, [[HitObject.new(0.5), HitObject.new(3), HitObject.new(2)],[HitObject.new(0.5), HitObject.new(1.5)],[HitObject.new(2)],[HitObject.new(1), HitObject.new(2.5)]] )
 	MapContainer.add_beat_map(hard_map)
 	
 	print('Global: ', MapContainer.beat_maps)

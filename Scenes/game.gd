@@ -18,6 +18,7 @@ var is_game_start = true
 func _ready():
 	print('Game: Start!')
 	load_map(MapContainer.beat_maps[1])
+	#load_map(MapContainer.beat_maps[0])
 	start()
 
 func _process(delta):
@@ -29,21 +30,29 @@ func _process(delta):
 			var track = spawn_notes[i]
 			if(!track): continue
 			
-			if track[0].time + time_offset < time_elapsed :
-				note_tracks[i].create_note()
-				spawn_notes[i].pop_front()
+			#if track[0].time + time_offset < time_elapsed :
+				#note_tracks[i].create_note()
+				#spawn_notes[i].pop_front()
 				
 
 func start() -> void:
-	SoundPlayer.play_sound_by_time(beat_map.time)
+	create_all_notes()
 	time_start = Global.get_current_time()
+	await get_tree().create_timer(Global.scroll_time).timeout
+	print(beat_map.get_max_stream(), ' ', beat_map.repeat_times)
+	SoundPlayer.play_sound_by_beats(beat_map.get_max_stream() * beat_map.repeat_times)
+	#SoundPlayer.play_sound_by_time(beat_map.time)
 
 func load_map(p_beat_map: BeatMap) -> void:
 	beat_map = p_beat_map
 	print('--------')
 	SoundPlayer.bpm = beat_map.bpm
-	beat_map.notes = beat_time_convert_to_real_time(beat_map.notes)
-	beat_map.notes = get_repeat_notes(beat_map)
+	print(SoundPlayer.bpm)
+	beat_map.stream_to_sec()
+	#beat_map.notes = stream_to_sec(beat_map.notes)
+	#print('tTTTTTmes: ', beat_map.get_notes_time(beat_map.original_notes))
+	#print('tTTTTTmes: ', beat_map.get_notes_time(beat_map.notes))
+	beat_map.notes = beat_map.get_repeat_notes()
 	
 	spawn_notes = beat_map.notes.duplicate(true)
 	
@@ -55,9 +64,9 @@ func load_map(p_beat_map: BeatMap) -> void:
 		note_track.set_notes(beat_map.notes[i])
 
 
-func beat_time_convert_to_real_time(map_notes: Array[Array]):
+func stream_to_sec(map_notes: Array[Array]):
 	var interval = beat_map.get_bpm_interval()
-	var new = map_notes
+	var new = map_notes.duplicate(true)
 	for i in range(new.size()):
 		new[i] = new[i].map(func (x): 
 			x.time = x.time * interval
@@ -65,16 +74,26 @@ func beat_time_convert_to_real_time(map_notes: Array[Array]):
 		)
 	return new
 
-func get_repeat_notes(beat_map: BeatMap) -> Array[Array]:
-	var repeat_times = beat_map.repeat_times as int
-	var notes = beat_map.notes
-	var least_stream = beat_map.get_least_stream()
-	for i in range(notes.size()):
-		var track = notes[i] as Array[HitObject]
-		var temp = track.duplicate(true)
-		print('least ' , least_stream)
-		for times in range(repeat_times):
-			track.append_array(temp.map(func (x): return HitObject.new(float(x.time) + float(least_stream * times+1))))
-		notes[i] = track
-	
-	return notes
+#func get_repeat_notes(beat_map: BeatMap) -> Array[Array]:
+	#var repeat_times = beat_map.repeat_times as int
+	#var notes = beat_map.notes
+	#var max_stream = beat_map.get_max_stream()
+	#for i in range(notes.size()):
+		#var track = notes[i] as Array[HitObject]
+		#var temp = track.duplicate(true)
+		#print('least ' , max_stream)
+		#for times in range(repeat_times):
+			#track.append_array(temp.map(func (x): return HitObject.new(float(x.time) + float(max_stream * times+1))))
+		#notes[i] = track
+	#return notes
+
+func create_all_notes() -> void:
+	for i in range(spawn_notes.size()):
+		var track = spawn_notes[i]
+		if(!track): continue
+		
+		while(spawn_notes[i]):
+			var time = spawn_notes[i].pop_front().time
+			(note_tracks[i] as NoteTrack).create_note_by_sec(time)
+			
+			
