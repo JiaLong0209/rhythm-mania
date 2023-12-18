@@ -45,7 +45,7 @@ func load_default_data() -> void:
 	MapContainer.add_beat_map(default_map)
 	
 	
-	var hard_map = BeatMap.new( '4k', 'hard', 180.0, 0.0, 2, [[HitObject.new(1), HitObject.new(3), HitObject.new(2)],[HitObject.new(1), HitObject.new(3)],[HitObject.new(2)],[HitObject.new(1), HitObject.new(2)]] )
+	var hard_map = BeatMap.new( '4k', 'hard', 240.0, 0.0, 2, [[HitObject.new(1), HitObject.new(3), HitObject.new(2)],[HitObject.new(1), HitObject.new(3)],[HitObject.new(2)],[HitObject.new(1), HitObject.new(2)]] )
 	MapContainer.add_beat_map(hard_map)
 	# 1 1 0 0 
 	# 1 0 1 1 
@@ -60,14 +60,13 @@ func load_default_data() -> void:
 		[2.0/4,1+1.0/4],
 		[1.0/4,1+2.0/4],
 	]
-	var crazy_map = BeatMap.new( '4k', 'crazy', 180.0, 0.0, 40, notes_generator(crazy_notes))
+	var crazy_map = BeatMap.new( '4k', 'crazy', 180.0, 0.0, 10, notes_generator(crazy_notes))
 	MapContainer.add_beat_map(crazy_map)
-	
 	print('Data: ', MapContainer.beat_maps)
 
-func notes_generator(beat_time: Array[Array]) -> Array[Array]:
+func notes_generator(note_stream: Array[Array]) -> Array[Array]:
 	var notes : Array[Array] = []
-	for track in beat_time:
+	for track in note_stream:
 		notes.append(track.map(func (time): return HitObject.new(time)))
 		
 	return notes

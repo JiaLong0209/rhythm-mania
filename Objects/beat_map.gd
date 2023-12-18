@@ -11,6 +11,7 @@ var notes : Array[Array] = [[]]
 
 var id : float 
 var play_data : Array[PlayResult]
+var is_repeated = false
 
 
 # mode, title, BPM, time, repeat_times, notes
@@ -45,22 +46,24 @@ func get_notes_count() -> int:
 	return sum
 	
 func get_repeat_notes() -> Array[Array]:
+	if(is_repeated): return notes
+	is_repeated = true
 	var max_stream = get_max_stream()
 	var repeat_notes = notes
 	for i in range(repeat_notes.size()):
 		var track = repeat_notes[i] as Array[HitObject]
 		var temp = track.duplicate(true)
-		print('least stream:' , max_stream)
+		print('least note_stream:' , max_stream)
 		for times in range(repeat_times):
 			if(times == 0): continue
-			track.append_array(temp.map(func (x): return HitObject.new(float(x.beat_time) + float(max_stream * times))))
+			track.append_array(temp.map(func (x): return HitObject.new(float(x.note_stream) + float(max_stream * times))))
 		repeat_notes[i] = track
 	return repeat_notes
 	
 func get_notes_beat_time() -> Array:
 	var notes_time = []
 	for track in notes:
-		notes_time.append_array(track.map(func (note:HitObject): return note.beat_time))
+		notes_time.append_array(track.map(func (note:HitObject): return note.note_stream))
 	return notes_time
 
 func stream_to_sec() -> void:
@@ -72,7 +75,7 @@ func stream_to_sec() -> void:
 func sort_notes() -> void:
 	for track in notes:
 		track as Array[HitObject]
-		track.sort_custom(func (a,b): return a.beat_time < b.beat_time)
+		track.sort_custom(func (a,b): return a.note_stream < b.note_stream)
 	
 	
 func print_beat_map_info() -> void:
@@ -87,6 +90,7 @@ func print_beat_map_info() -> void:
 	for track in notes:
 		print('  Track')
 		for note:HitObject in track:
-			print('    time: %f' % [note.beat_time])
-			#print('  type: ' + str(note.type))
-			#print('  random: ' + str(note.is_random))
+			print('    Stream: %f' % [note.note_stream])
+			#print('    Time: %f' % [note.sec_time])
+			#print('    type: ' + str(note.type))
+			#print('    random: ' + str(note.is_random))

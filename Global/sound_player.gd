@@ -10,7 +10,7 @@ var beat_count : int = 0
 
 func _ready():
 	$BeatSoundPlayer.stream = sound 
-	$BeatSoundPlayer.max_polyphony = 4 
+	$BeatSoundPlayer.max_polyphony = 1
 	
 func play_sound_by_beats(beats: int):
 	isPlaying = true 

@@ -5,7 +5,7 @@ var beat_map: BeatMap
 var time_start : float = 0
 var time_now : float = 0
 var time_elapsed : float = 0
-var time_offset = 0
+var time_offset = -0.01
 
 var bpm_offset : float = Global.bpm_offset
 
@@ -32,7 +32,7 @@ func _process(delta):
 			var track = spawn_notes[i]
 			if(!track): continue
 			
-			#if track[0].beat_time + time_offset < time_elapsed :
+			#if track[0].stream + time_offset < time_elapsed :
 				#note_tracks[i].create_note()
 				#spawn_notes[i].pop_front()
 				
@@ -44,14 +44,14 @@ func start() -> void:
 	print(beat_map.get_max_stream(), ' ', beat_map.repeat_times)
 	
 	#SoundPlayer.play_sound_by_beats(beat_map.get_max_stream() * beat_map.repeat_times)
-	SoundPlayer.play_sound_by_time(beat_map.time - 0.0001)
+	SoundPlayer.play_sound_by_time(beat_map.time + time_offset)
 
 func load_map(p_beat_map: BeatMap) -> void:
 	beat_map = p_beat_map
 	print('--------')
 	SoundPlayer.bpm = beat_map.bpm * bpm_offset
 	print('Sound Player BPM: %f' % SoundPlayer.bpm)
-	beat_map.notes = beat_map.get_repeat_notes()
+	beat_map.notes = beat_map.get_repeat_notes().duplicate(true)
 	beat_map.set_beat_map_time()
 	beat_map.stream_to_sec()
 	
@@ -75,7 +75,9 @@ func create_all_notes() -> void:
 			(note_tracks[i] as NoteTrack).create_note_by_sec(time)
 			
 func restart() -> void:
-	print('Game: Start!')
-	load_map(MapContainer.beat_maps[current_map_index]) 
-	start()
+	print('Game: Restart!')
+	get_tree().reload_current_scene()
+	spawn_notes = [[]]
+	SoundPlayer.stop()
+	#start()
 	
