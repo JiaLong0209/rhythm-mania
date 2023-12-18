@@ -9,7 +9,6 @@ var time : float = 0.0
 var repeat_times : int = 0
 var notes : Array[Array] = [[]]
 
-var original_notes: Array[Array] = [[]]
 var id : float 
 var play_data : Array[PlayResult]
 
@@ -22,22 +21,17 @@ func _init(p_mode: String , p_title: String, p_bpm: float, p_time: float, p_stre
 	time = p_time
 	repeat_times = p_streams
 	notes = p_notes.duplicate(true)
-	var temp = p_notes.duplicate(true)
-	original_notes = temp.duplicate(true)
 	
 	sort_notes()
 	time = set_beat_map_time()
 	id = Global.get_current_time()
 
-func _ready():
-	pass 
-
 func set_beat_map_time() -> float:
-	return max(time, repeat_times * get_bpm_interval() * get_max_stream())
+	return max(time, get_bpm_interval() * get_max_stream() * repeat_times)
 	
 func get_max_stream() -> int:
-	print(get_notes_time(original_notes))
-	return ceil(get_notes_time(original_notes).max())
+	print(get_notes_beat_time())
+	return ceil(get_notes_beat_time().max())
 
 func get_bpm_interval() -> float:
 	return 60 / bpm
@@ -56,31 +50,26 @@ func get_repeat_notes() -> Array[Array]:
 		var temp = track.duplicate(true)
 		print('least stream:' , max_stream)
 		for times in range(repeat_times - 1):
-			track.append_array(temp.map(func (x): return HitObject.new(float(x.time) + float(max_stream * times+1))))
+			track.append_array(temp.map(func (x): return HitObject.new(float(x.beat_time) + float(max_stream * times+1))))
 		repeat_notes[i] = track
 	return repeat_notes
 	
-func get_notes_time(p_notes: Array[Array]) -> Array:
+func get_notes_beat_time() -> Array:
 	var notes_time = []
-	for track in p_notes:
-		notes_time.append_array(track.map(func (note:HitObject): return note.time))
-	
+	for track in notes:
+		notes_time.append_array(track.map(func (note:HitObject): return note.beat_time))
 	return notes_time
 
-func stream_to_sec():
-	var temp_notes = notes.duplicate(true)
+func stream_to_sec() -> void:
 	var interval = get_bpm_interval()
-	
-	for i in range(notes.size()):
-		for j in range(notes[i].size()):
-			temp_notes[i][j].time *= interval
-	
-	return temp_notes
+	for track in notes:
+		for note in track:
+			(note as HitObject).set_sec_time(interval)
 	
 func sort_notes() -> void:
 	for track in notes:
 		track as Array[HitObject]
-		track.sort_custom(func (a,b): return a.time < b.time)
+		track.sort_custom(func (a,b): return a.beat_time < b.beat_time)
 	
 	
 func print_beat_map_info() -> void:
@@ -95,6 +84,6 @@ func print_beat_map_info() -> void:
 	for track in notes:
 		print('  Track')
 		for note:HitObject in track:
-			print('    time: %f' % [note.time])
+			print('    time: %f' % [note.beat_time])
 			#print('  type: ' + str(note.type))
 			#print('  random: ' + str(note.is_random))
