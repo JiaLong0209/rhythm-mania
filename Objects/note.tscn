@@ -12,6 +12,8 @@ z_index = 10
 script = ExtResource("1_ctj7k")
 
 [node name="NoteTexture" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.698039)
+self_modulate = Color(0.67451, 0.835294, 0.905882, 1)
 material = SubResource("CanvasItemMaterial_qkdap")
 texture = ExtResource("2_gfvt7")
 

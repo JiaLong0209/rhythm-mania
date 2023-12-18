@@ -7,8 +7,13 @@ func _ready():
 	pass 
 
 func _input(event):
-	if Input.is_action_just_pressed('quit_game'):
+	if Input.is_action_just_pressed('game_quit'):
 		get_tree().quit()
+		
+	if Input.is_action_just_pressed('game_restart'):
+		var game = get_tree().get_nodes_in_group('game')[0] as Game
+		game.restart()
+		
 		
 	if Global.is_game_start:
 		for i in key_index:
@@ -18,7 +23,7 @@ func _input(event):
 				release_by_index(i-1)
 				
 func press_by_index(index: int):
-		var note_track = get_tree().get_nodes_in_group('note_track')[index]
+		var note_track = get_tree().get_nodes_in_group('note_track')[index] as NoteTrack
 		note_track.get_node('IdleNote').press()
 	
 func release_by_index(index: int):

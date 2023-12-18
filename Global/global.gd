@@ -1,26 +1,10 @@
 extends Node2D
 
-enum Mode {
-	Key0 = 0,
-	Key4 = 4,
-	Key5 = 5,
-	Key6 = 6,
-	Key7 = 7,
-}
+enum Mode { Key0 = 0, Key4 = 4, Key5 = 5, Key6 = 6, Key7 = 7 }
 
-enum NoteType {
-	NOTE = 0,
-	LONG_NOTE = 1,
-}
+enum NoteType { NOTE = 0, LONG_NOTE = 1 }
 
-enum Judgement {
-	PERFECT = 17,
-	GREAT = 40,
-	GOOD = 80,
-	OK = 110,
-	MEH = 130,
-	MISS = 163,
-}
+enum Judgement { PERFECT = 17, GREAT = 40, GOOD = 80, OK = 110, MEH = 130, MISS = 163 }
 
 enum JudgementType { PERFECT, GREAT, GOOD, OK, MEH, MISS }
 
@@ -37,8 +21,9 @@ var hit_result = [ "Perfect", "Great", "Good", "Ok", "Bad", "Miss" ]
 
 # User setting
 var scroll_time : float = 0.5
-var audio_offset : int = 0
+var audio_offset : float = -0.040
 var hit_offset : int = 0
+var bpm_offset : float = 1.011
 var start_time : float = 1.0
 var preparation_beat : int = 3
 
@@ -55,24 +40,13 @@ var transition := 0.4
 func _ready():
 	Engine.max_fps = 120
 	print("Global ready")
-	load_default_data()
+	user_data.load_default_data()
 	if dev:
 		test()
 		while dev:
 			await get_tree().create_timer(1.0).timeout
 			#print('FPS: %s' % Engine.get_frames_per_second())
 	
-func load_default_data() -> void:
-	#var default_map = BeatMap.new( '4k', 'easy', 120.0, 13.0, 0, [[0.25,0.75],[0.5,0.75],[0.5,0.75],[0.5,0.75]] )
-	var default_map = BeatMap.new( '4k', 'easy', 120.0, 0, 5, [[HitObject.new(1), HitObject.new(2)],[HitObject.new(1)],[HitObject.new(1.5)],[HitObject.new(2), HitObject.new(1)]] )
-	MapContainer.add_beat_map(default_map)
-	
-	var hard_map = BeatMap.new( '4k', 'hard', 180.0, 0.0, 5, [[HitObject.new(1), HitObject.new(3), HitObject.new(2)],[HitObject.new(1), HitObject.new(3)],[HitObject.new(2)],[HitObject.new(1), HitObject.new(2)]] )
-	#var hard_map = BeatMap.new( '4k', 'hard', 180.0, 0.0, 5, [[HitObject.new(0.5), HitObject.new(3), HitObject.new(2)],[HitObject.new(0.5), HitObject.new(1.5)],[HitObject.new(2)],[HitObject.new(1), HitObject.new(2.5)]] )
-	MapContainer.add_beat_map(hard_map)
-	
-	print('Global: ', MapContainer.beat_maps)
-	user_data.print_beat_maps_info()
 
 func get_current_time() -> float:
 	return Time.get_unix_time_from_system()

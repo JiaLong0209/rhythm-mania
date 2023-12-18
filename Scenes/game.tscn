@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bw1joyir4dl7a" path="res://Objects/note_container.tscn" id="2_ti7wo"]
 [ext_resource type="PackedScene" uid="uid://ciqka41kpwile" path="res://UI/ui.tscn" id="3_g5rma"]
 
-[node name="Game" type="Node2D"]
+[node name="Game" type="Node2D" groups=["game"]]
 script = ExtResource("1_p0jlt")
 
 [node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]

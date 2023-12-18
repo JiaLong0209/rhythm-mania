@@ -1,3 +1,4 @@
+class_name Game
 extends Node2D
 
 var beat_map: BeatMap 
@@ -5,21 +6,21 @@ var time_start : float = 0
 var time_now : float = 0
 var time_elapsed : float = 0
 var time_offset = 0
-var bpm_offset = 5
+
+var bpm_offset : float = Global.bpm_offset
 
 var play_result : PlayResult
 var spawn_notes: Array[Array]
 
 var is_game_start = true
-
+var current_map_index = 2
 
 @onready var note_container = $AspectRatioContainer/CenterContainer/NoteContainer
 @onready var note_tracks = note_container.get_node('TrackContainer').get_children() as Array[NoteTrack]
 
 func _ready():
 	print('Game: Start!')
-	load_map(MapContainer.beat_maps[1])
-	#load_map(MapContainer.beat_maps[0])
+	load_map(MapContainer.beat_maps[current_map_index]) 
 	start()
 
 func _process(delta):
@@ -39,21 +40,19 @@ func _process(delta):
 func start() -> void:
 	create_all_notes()
 	time_start = Global.get_current_time()
-	await get_tree().create_timer(Global.scroll_time).timeout
+	await get_tree().create_timer(Global.scroll_time + Global.audio_offset).timeout
 	print(beat_map.get_max_stream(), ' ', beat_map.repeat_times)
 	
 	#SoundPlayer.play_sound_by_beats(beat_map.get_max_stream() * beat_map.repeat_times)
-	SoundPlayer.play_sound_by_time(beat_map.time)
+	SoundPlayer.play_sound_by_time(beat_map.time - 0.0001)
 
 func load_map(p_beat_map: BeatMap) -> void:
 	beat_map = p_beat_map
 	print('--------')
-	SoundPlayer.bpm = beat_map.bpm + bpm_offset
-	print(SoundPlayer.bpm)
-	#beat_map.notes = stream_to_sec(beat_map.notes)
-	#print('tTTTTTmes: ', beat_map.get_notes_time(beat_map.original_notes))
-	#print('tTTTTTmes: ', beat_map.get_notes_time(beat_map.notes))
+	SoundPlayer.bpm = beat_map.bpm * bpm_offset
+	print('Sound Player BPM: %f' % SoundPlayer.bpm)
 	beat_map.notes = beat_map.get_repeat_notes()
+	beat_map.set_beat_map_time()
 	beat_map.stream_to_sec()
 	
 	spawn_notes = beat_map.notes.duplicate(true)
@@ -75,4 +74,8 @@ func create_all_notes() -> void:
 			var time = spawn_notes[i].pop_front().sec_time
 			(note_tracks[i] as NoteTrack).create_note_by_sec(time)
 			
-			
+func restart() -> void:
+	print('Game: Start!')
+	load_map(MapContainer.beat_maps[current_map_index]) 
+	start()
+	

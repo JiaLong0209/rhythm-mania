@@ -23,11 +23,13 @@ func _init(p_mode: String , p_title: String, p_bpm: float, p_time: float, p_stre
 	notes = p_notes.duplicate(true)
 	
 	sort_notes()
-	time = set_beat_map_time()
+	set_beat_map_time()
+	
 	id = Global.get_current_time()
 
-func set_beat_map_time() -> float:
-	return max(time, get_bpm_interval() * get_max_stream() * repeat_times)
+func set_beat_map_time() -> void:
+	time = max(time, get_bpm_interval() * get_max_stream())
+	print('\tMap time: %f' % time)
 	
 func get_max_stream() -> int:
 	print(get_notes_beat_time())
@@ -49,8 +51,9 @@ func get_repeat_notes() -> Array[Array]:
 		var track = repeat_notes[i] as Array[HitObject]
 		var temp = track.duplicate(true)
 		print('least stream:' , max_stream)
-		for times in range(repeat_times - 1):
-			track.append_array(temp.map(func (x): return HitObject.new(float(x.beat_time) + float(max_stream * times+1))))
+		for times in range(repeat_times):
+			if(times == 0): continue
+			track.append_array(temp.map(func (x): return HitObject.new(float(x.beat_time) + float(max_stream * times))))
 		repeat_notes[i] = track
 	return repeat_notes
 	
