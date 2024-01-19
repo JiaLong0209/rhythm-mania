@@ -23,7 +23,7 @@ var hit_result = [ "Perfect", "Great", "Good", "Ok", "Bad", "Miss" ]
 var scroll_time : float = 0.5
 var audio_offset : float = -0.040
 var hit_offset : int = 0
-var bpm_offset : float = 1.011
+var bpm_offset : float = 1.001
 var start_time : float = 1.0
 var preparation_beat : int = 3
 
@@ -47,6 +47,8 @@ func _ready():
 			await get_tree().create_timer(1.0).timeout
 			#print('FPS: %s' % Engine.get_frames_per_second())
 	
+func get_bpm_interval(bpm) -> float:
+	return 60 / bpm
 
 func get_current_time() -> float:
 	return Time.get_unix_time_from_system()
