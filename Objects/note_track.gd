@@ -36,6 +36,7 @@ func create_note_by_sec(time: float) -> void:
 	note.position = spawn_mark.position
 	fit_note_size_to_track(note)
 	await get_tree().create_timer(time).timeout
+	#note.set_target_time()
 	add_child(note)
 	
 func set_notes(p_notes: Array) -> void:
@@ -75,26 +76,36 @@ func hit() -> void:
 			break
 		
 func judgement(note: Note) -> void:
-	var error = abs(note.get_error_ms_by_dist())
+	var error
 	
-	if error < Global.Judgement.MISS:
-		print('Diff: %f, Error(ms): %f' % [note.get_diff(), note.get_error_ms_by_dist()])
-		if error < Global.Judgement.PERFECT:
-			print(Global.hit_result[Global.JudgementType.PERFECT])
-		elif error < Global.Judgement.GREAT:
-			print(Global.hit_result[Global.JudgementType.GREAT])
-		elif error < Global.Judgement.GOOD:
-			print(Global.hit_result[Global.JudgementType.GOOD])
-		elif error < Global.Judgement.OK:
-			print(Global.hit_result[Global.JudgementType.OK])
-		elif error < Global.Judgement.MEH:
-			print(Global.hit_result[Global.JudgementType.MEH])
-		elif error < Global.Judgement.MISS:
-			print(Global.hit_result[Global.JudgementType.MISS])
+	match Global.judgement_method:
+		Global.JudgementMethod.DISTANCE:
+			error = abs(note.get_error_ms_by_dist()) 
+		Global.JudgementMethod.TIME:
+			error = abs(note.get_error_ms_by_time(0, 0))
 		
-		note.queue_free()
+	if error > Global.Judgement.MISS:
+		return 
+	
+	print('Diff: %f, Error(ms): %f' % [note.get_diff(), error])
+	if error < Global.Judgement.PERFECT:
+		print(Global.hit_result[Global.JudgementType.PERFECT])
+	elif error < Global.Judgement.GREAT:
+		print(Global.hit_result[Global.JudgementType.GREAT])
+	elif error < Global.Judgement.GOOD:
+		print(Global.hit_result[Global.JudgementType.GOOD])
+	elif error < Global.Judgement.OK:
+		print(Global.hit_result[Global.JudgementType.OK])
+	elif error < Global.Judgement.MEH:
+		print(Global.hit_result[Global.JudgementType.MEH])
+	elif error < Global.Judgement.MISS:
+		print(Global.hit_result[Global.JudgementType.MISS])
+	
+	note.queue_free()
 	return
 	
+
+# --------Test functions--------
 
 func test() -> void:
 	# create note by random time

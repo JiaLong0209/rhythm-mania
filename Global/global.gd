@@ -5,8 +5,8 @@ enum Mode { Key0 = 0, Key4 = 4, Key5 = 5, Key6 = 6, Key7 = 7 }
 enum NoteType { NOTE = 0, LONG_NOTE = 1 }
 
 enum Judgement { PERFECT = 17, GREAT = 40, GOOD = 80, OK = 110, MEH = 130, MISS = 163 }
-
 enum JudgementType { PERFECT, GREAT, GOOD, OK, MEH, MISS }
+enum JudgementMethod { DISTANCE, TIME }
 
 @export var user_data : Data = Data.new()
 
@@ -26,6 +26,7 @@ var hit_offset : int = 0
 var bpm_offset : float = 1.001
 var start_time : float = 1.0
 var preparation_beat : int = 3
+var judgement_method := JudgementMethod.TIME
 
 #var dev = true
 var dev = false

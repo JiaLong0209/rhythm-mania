@@ -12,7 +12,7 @@ var notes : Array[Array] = [[]]
 var id : float 
 var play_data : Array[PlayResult]
 var is_repeated = false
-
+var current_time : float = 0.0
 
 # mode, title, BPM, time, repeat_times, notes
 func _init(p_mode: String , p_title: String, p_bpm: float, p_time: float, p_streams: int, p_notes : Array[Array]):

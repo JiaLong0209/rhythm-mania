@@ -55,12 +55,12 @@ func load_default_data() -> void:
 	# 1 0 1 1 
 	# 1 1 0 1 
 	var crazy_notes : Array[Array] = [
+		[1.0/4,1+2.0/4],
 		[3.0/4,1+4.0/4],
 		[4.0/4,1+3.0/4],
 		[2.0/4,1+1.0/4],
-		[1.0/4,1+2.0/4],
 	]
-	var crazy_map = BeatMap.new( '4k', 'crazy', 180.0, 0.0, 10, notes_generator(crazy_notes))
+	var crazy_map = BeatMap.new( '4k', 'crazy', 200.0, 0.0, 10, notes_generator(crazy_notes))
 	MapContainer.add_beat_map(crazy_map)
 	print('Data: ', MapContainer.beat_maps)
 
