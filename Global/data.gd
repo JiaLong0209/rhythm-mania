@@ -41,7 +41,7 @@ func print_beat_maps_info() -> void:
 		i.print_beat_map_info()
 
 func load_default_data() -> void:
-	var default_map = BeatMap.new( '4k', 'easy', 120.0, 0, 5, [[HitObject.new(1), HitObject.new(2)],[HitObject.new(1)],[HitObject.new(1.5)],[HitObject.new(2), HitObject.new(1)]] )
+	var default_map = BeatMap.new( '4k', 'easy', 100.0, 0, 3, [[HitObject.new(1), HitObject.new(2)],[HitObject.new(1)],[HitObject.new(1.5)],[HitObject.new(2), HitObject.new(1)]] )
 	MapContainer.add_beat_map(default_map)
 	
 	
@@ -70,3 +70,4 @@ func notes_generator(note_stream: Array[Array]) -> Array[Array]:
 		notes.append(track.map(func (time): return HitObject.new(time)))
 		
 	return notes
+ 

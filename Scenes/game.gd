@@ -13,7 +13,7 @@ var play_result : PlayResult
 var spawn_notes: Array[Array]
 
 var is_game_start = true
-var current_map_index = 2
+var current_map_index = 0
 
 @onready var note_container = $AspectRatioContainer/CenterContainer/NoteContainer
 @onready var note_tracks = note_container.get_node('TrackContainer').get_children() as Array[NoteTrack]
@@ -28,10 +28,11 @@ func _process(delta):
 		time_now = Global.get_current_time()
 		time_elapsed = time_now - time_start
 		
-		for i in range(spawn_notes.size()):
-			var track = spawn_notes[i]
-			if(!track): continue
-			
+		Global.current_time = time_elapsed
+		#print(time_elapsed)
+		#for i in range(spawn_notes.size()):
+			#var track = spawn_notes[i]
+			#if(!track): continue
 			#if track[0].stream + time_offset < time_elapsed :
 				#note_tracks[i].create_note()
 				#spawn_notes[i].pop_front()
@@ -67,9 +68,7 @@ func load_map(p_beat_map: BeatMap) -> void:
 
 func create_all_notes() -> void:
 	for i in range(spawn_notes.size()):
-		var track = spawn_notes[i]
-		if(!track): continue
-		
+		if(!spawn_notes[i]): continue
 		while(spawn_notes[i]):
 			var time = spawn_notes[i].pop_front().sec_time
 			(note_tracks[i] as NoteTrack).create_note_by_sec(time)
@@ -79,5 +78,6 @@ func restart() -> void:
 	get_tree().reload_current_scene()
 	spawn_notes = [[]]
 	SoundPlayer.stop()
+	time_start = Global.get_current_time()
 	#start()
 	

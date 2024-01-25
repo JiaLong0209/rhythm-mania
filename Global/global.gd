@@ -18,6 +18,7 @@ var Colors = {
 	'white': Color('fff'),
 }
 var hit_result = [ "Perfect", "Great", "Good", "Ok", "Bad", "Miss" ]
+var current_time : float = 0.0
 
 # User setting
 var scroll_time : float = 0.5
@@ -33,13 +34,14 @@ var dev = false
 var is_game_start = true
 var judgement_max_error = 200
 
+
 var transition := 0.4
 
 @onready var screen_size = DisplayServer.screen_get_size()
 @onready var window = get_window()
 
 func _ready():
-	Engine.max_fps = 120
+	Engine.max_fps = 360
 	print("Global ready")
 	user_data.load_default_data()
 	if dev:

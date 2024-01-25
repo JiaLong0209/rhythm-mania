@@ -8,4 +8,3 @@ func _ready():
 func resize() -> void:
 	custom_minimum_size.y = Global.window.size.y
 	print(custom_minimum_size.y)
-

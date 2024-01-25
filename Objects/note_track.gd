@@ -6,6 +6,7 @@ var track_width_offset := -5
 var track_width : float = 0.0
 var top_idle_note : bool = false
 var notes : Array
+var current_note_index : int = 0
 
 @onready var note_scene = preload("res://Objects/note.tscn")
 @onready var track = $TrackBG
@@ -76,18 +77,26 @@ func hit() -> void:
 			break
 		
 func judgement(note: Note) -> void:
-	var error
-	
+	var error 
+	var diff
 	match Global.judgement_method:
 		Global.JudgementMethod.DISTANCE:
 			error = abs(note.get_error_ms_by_dist()) 
 		Global.JudgementMethod.TIME:
-			error = abs(note.get_error_ms_by_time(0, 0))
-		
+			if(current_note_index >= notes.size()): return
+			print(current_note_index)
+			print(notes[current_note_index].sec_time)
+			print(Global.current_time)
+			diff = (note.get_error_ms_by_time(Global.current_time, notes[current_note_index].sec_time + Global.scroll_time - 0.05))
+			error = abs(diff)
+	
+	
+	print('Diff: %f, Error(ms): %f' % [diff, error])
 	if error > Global.Judgement.MISS:
 		return 
 	
-	print('Diff: %f, Error(ms): %f' % [note.get_diff(), error])
+	current_note_index += 1
+	
 	if error < Global.Judgement.PERFECT:
 		print(Global.hit_result[Global.JudgementType.PERFECT])
 	elif error < Global.Judgement.GREAT:
@@ -102,7 +111,6 @@ func judgement(note: Note) -> void:
 		print(Global.hit_result[Global.JudgementType.MISS])
 	
 	note.queue_free()
-	return
 	
 
 # --------Test functions--------

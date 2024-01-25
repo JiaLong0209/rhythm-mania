@@ -28,7 +28,7 @@ func play_sound_bpm(beats: int = -1):
 	while(isPlaying):
 		beat_count += 1 
 		await get_tree().create_timer(60 / bpm).timeout 
-		print(beat_count) if beat_count else print(pre_beat_count)
+		#print(beat_count) if beat_count else print(pre_beat_count)
 		if(beats != -1):
 			if beat_count >= beats:
 				print('over')
