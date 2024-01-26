@@ -81,12 +81,12 @@ func judgement(note: Note) -> void:
 	var diff
 	match Global.judgement_method:
 		Global.JudgementMethod.DISTANCE:
+			diff = note.get_diff()
 			error = abs(note.get_error_ms_by_dist()) 
 		Global.JudgementMethod.TIME:
 			if(current_note_index >= notes.size()): return
 			print(current_note_index)
 			print(notes[current_note_index].sec_time)
-			print(Global.current_time)
 			diff = (note.get_error_ms_by_time(Global.current_time, notes[current_note_index].sec_time + Global.scroll_time - 0.05))
 			error = abs(diff)
 	

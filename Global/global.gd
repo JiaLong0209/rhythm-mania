@@ -27,7 +27,7 @@ var hit_offset : int = 0
 var bpm_offset : float = 1.001
 var start_time : float = 1.0
 var preparation_beat : int = 3
-var judgement_method := JudgementMethod.TIME
+var judgement_method := JudgementMethod.DISTANCE
 
 #var dev = true
 var dev = false

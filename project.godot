@@ -23,6 +23,10 @@ InputController="*res://Global/input_controller.gd"
 Global="*res://Global/global.gd"
 MapContainer="*res://Global/map_container.gd"
 
+[display]
+
+window/vsync/vsync_mode=0
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/godot_vim/plugin.cfg")
